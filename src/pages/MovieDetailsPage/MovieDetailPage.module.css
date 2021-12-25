@@ -1,0 +1,35 @@
+.Section {
+}
+
+.MainInfo {
+  display: flex;
+  border-bottom: 1px solid gray;
+}
+
+.Poster {
+  margin-bottom: 15px;
+}
+
+.Img {
+  display: block;
+}
+
+.Descr {
+  margin-left: 20px;
+  text-align: left;
+}
+
+.Genres {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.Genre:not(:last-child) {
+  margin-right: 10px;
+}
+
+.AddInfo {
+}
