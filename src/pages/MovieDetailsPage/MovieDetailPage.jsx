@@ -1,11 +1,4 @@
-import {
-  Routes,
-  Route,
-  Link,
-  NavLink,
-  useLocation,
-  //   useRoutes,
-} from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
@@ -13,11 +6,11 @@ import { toast } from 'react-toastify';
 import * as api from '../../services/themoviedb-api';
 import styles from './MovieDetailPage.module.css';
 import Cast from '../Cast/Cast';
+import Reviews from '../Reviews/Reviews';
 
 export default function MovieDetailPage() {
+  const navigate = useNavigate();
   const { movieId } = useParams();
-  const { pathname } = useLocation();
-  console.log(pathname);
 
   const [movie, setMovie] = useState([]);
   const [error, setError] = useState(null);
@@ -63,10 +56,13 @@ export default function MovieDetailPage() {
 
       {status === 'resolved' && (
         <section className={styles.Section}>
+          <button onClick={() => navigate(-1)}>go back</button>
           <div className={styles.MainInfo}>
             <img
               className={styles.Img}
-              src={`https://image.tmdb.org/t/p/w342/${poster_path}`}
+              src={
+                poster_path && `https://image.tmdb.org/t/p/w342/${poster_path}`
+              }
               alt={tagline}
             />
             <div className={styles.Descr}>
@@ -86,22 +82,23 @@ export default function MovieDetailPage() {
               </ul>
             </div>
           </div>
-          <div>
+          <div className={styles.AddInfo}>
             <p>Additional information</p>
-            <ul>
+            <ul className={styles.AddInfoList}>
               <li>
-                <NavLink to={`${pathname}/cast`}>Cast</NavLink>
+                <Link to={`./cast`}>Cast</Link>
               </li>
-              {/* <li>
-                <NavLink to="/movies/:movieId/reviews"></NavLink>
-              </li> */}
+              <li>
+                <Link to={`./reviews`}>Reviews</Link>
+              </li>
             </ul>
           </div>
         </section>
       )}
 
       <Routes>
-        <Route path=":movieId/" element={<Cast movieId={movieId} />} />
+        <Route path="cast" element={<Cast movieId={movieId} />} />
+        <Route path="reviews" element={<Reviews movieId={movieId} />} />
       </Routes>
     </>
   );

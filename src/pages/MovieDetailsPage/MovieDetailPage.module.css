@@ -32,4 +32,14 @@
 }
 
 .AddInfo {
+  border-bottom: 1px solid gray;
+  margin-bottom: 10px;
+}
+
+.AddInfoList{
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  text-align: left;
+  list-style: none;
 }

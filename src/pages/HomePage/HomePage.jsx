@@ -1,4 +1,4 @@
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
@@ -9,8 +9,6 @@ export default function HomePage() {
   const [trendsFilms, setTrendsFilms] = useState(null);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
-
-  const { pathname } = useLocation();
 
   useEffect(() => {
     setStatus('pending');
@@ -43,13 +41,13 @@ export default function HomePage() {
       )}
 
       {status === 'resolved' && (
-        <ol className={styles.list}>
-          {trendsFilms.map(film => (
-            <li key={film.id} className={styles.item}>
-              <Link to={`${pathname}movies/${film.id}`}>{film.title}</Link>
+        <ul className={styles.list}>
+          {trendsFilms.map(({ id, title }) => (
+            <li key={id} className={styles.item}>
+              <Link to={`/movies/${id}`}>{title}</Link>
             </li>
           ))}
-        </ol>
+        </ul>
       )}
     </section>
   );

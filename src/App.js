@@ -16,7 +16,7 @@ export default function App() {
         <PageHeader />
         {/* <h1>Welcome to React Router!</h1> */}
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<HomePage />}></Route>
           <Route path="/movies" element={<MoviesPage />} />
           <Route path="/movies/:movieId/*" element={<MovieDetailPage />} />
         </Routes>

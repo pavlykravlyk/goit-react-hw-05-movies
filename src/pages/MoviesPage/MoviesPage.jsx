@@ -15,7 +15,7 @@ export default function MoviesPage() {
   };
 
   return (
-    <>
+    <section>
       <h2>сторінка пошуку кінофільмів за ключовим словом</h2>
       <form onSubmit={handleFormSubmit} className={styles.MoviesPage}>
         <input
@@ -34,6 +34,6 @@ export default function MoviesPage() {
           search
         </button>
       </form>
-    </>
+    </section>
   );
 }

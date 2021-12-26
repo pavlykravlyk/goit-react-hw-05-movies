@@ -24,18 +24,24 @@ export function fetchDetails(movieId) {
   return fetch(`${BASE_URL}/${MediaType.MOVIE}/${movieId}?${searchParams}`);
 }
 
-export function fetchCredits(movieId) {
+export function fetchCast(movieId) {
   const searchParams = new URLSearchParams({
     api_key: API_KEY,
   });
 
-  const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=9b761b6f4cc8300b0313efea2435331b&language=en-US`;
+  return fetch(
+    `${BASE_URL}/${MediaType.MOVIE}/${movieId}/credits?${searchParams}`,
+  );
+}
 
-  return fetch(url);
+export function fetchReviews(movieId) {
+  const searchParams = new URLSearchParams({
+    api_key: API_KEY,
+  });
 
-  //   return fetch(
-  //     `${BASE_URL}/${MediaType.MOVIE}/${movieId}/credits?${searchParams}`,
-  //   );
+  return fetch(
+    `${BASE_URL}/${MediaType.MOVIE}/${movieId}/reviews?${searchParams}`,
+  );
 }
 
 // export function fetch(searchQuery, page) {
@@ -47,8 +53,3 @@ export function fetchCredits(movieId) {
 
 //   return fetch(`${BASE_URL}?${searchParams}`);
 // }
-
-// fetchFilms.propTypes = {
-//   searchQuery: PropTypes.string,
-//   page: PropTypes.number,
-// };

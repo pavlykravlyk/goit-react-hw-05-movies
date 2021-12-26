@@ -1,0 +1,23 @@
+.List{
+    list-style: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    text-align: left;
+}
+
+/* .Item{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px  solid gray;
+} */
+
+.Character{
+    text-transform: capitalize;
+}
+
+.ProfileImg{
+    width: 185px;
+    height: auto;
+}
