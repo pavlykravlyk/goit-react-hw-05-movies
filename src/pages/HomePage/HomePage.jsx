@@ -37,7 +37,7 @@ export default function HomePage() {
       <h2 className={styles.title}>Trending today</h2>
 
       {status === 'pending' && (
-        <Loader type="ThreeDots" color="gray" height={100} width={100} />
+        <Loader type="ThreeDots" color="gray" height={80} width={80} />
       )}
 
       {status === 'resolved' && (
