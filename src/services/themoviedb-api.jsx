@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = '9b761b6f4cc8300b0313efea2435331b';
@@ -44,12 +44,12 @@ export function fetchReviews(movieId) {
   );
 }
 
-// export function fetch(searchQuery, page) {
-//   const searchParams = new URLSearchParams({
-//     api_key: API_KEY,
-//     query: searchQuery,
-//     page: page,
-//   });
+export function fetchMovieByQuery(searchQuery) {
+  const searchParams = new URLSearchParams({
+    api_key: API_KEY,
+    query: searchQuery,
+    // page: page,
+  });
 
-//   return fetch(`${BASE_URL}?${searchParams}`);
-// }
+  return fetch(`${BASE_URL}/search/${MediaType.MOVIE}?${searchParams}`);
+}
