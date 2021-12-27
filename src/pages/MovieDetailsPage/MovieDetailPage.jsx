@@ -1,12 +1,13 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
-import Loader from 'react-loader-spinner';
 import { toast } from 'react-toastify';
+import Loader from 'react-loader-spinner';
 import * as api from '../../services/themoviedb-api';
 import styles from './MovieDetailPage.module.css';
-import Cast from '../Cast/Cast';
-import Reviews from '../Reviews/Reviews';
+
+const Cast = lazy(() => import('../Cast/Cast'));
+const Reviews = lazy(() => import('../Reviews/Reviews'));
 
 export default function MovieDetailPage() {
   const navigate = useNavigate();
@@ -96,10 +97,16 @@ export default function MovieDetailPage() {
         </section>
       )}
 
-      <Routes>
-        <Route path="cast" element={<Cast movieId={movieId} />} />
-        <Route path="reviews" element={<Reviews movieId={movieId} />} />
-      </Routes>
+      <Suspense
+        fallback={
+          <Loader type="ThreeDots" color="gray" height={80} width={80} />
+        }
+      >
+        <Routes>
+          <Route path="cast" element={<Cast movieId={movieId} />} />
+          <Route path="reviews" element={<Reviews movieId={movieId} />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }
