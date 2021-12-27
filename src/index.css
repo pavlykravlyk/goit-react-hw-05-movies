@@ -12,6 +12,6 @@ code {
     monospace;
 }
 
-a {
-  color: black;
+.active {
+  color: red;
 }
