@@ -32,11 +32,9 @@ export default function MoviesPage() {
       <form
         onSubmit={event => {
           event.preventDefault();
-
           searchQuery.trim() !== ''
             ? getMovieByQuery(searchQuery)
             : toast.error('input field must not be empty');
-
           setSearchQuery('');
         }}
         className={styles.MoviesPage}
