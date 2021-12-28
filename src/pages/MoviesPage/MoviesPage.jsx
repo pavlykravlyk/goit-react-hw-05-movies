@@ -10,6 +10,18 @@ export default function MoviesPage() {
   const [error, setError] = useState('null');
   const [status, setStatus] = useState('idle');
 
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    searchQuery.trim() !== ''
+      ? getMovieByQuery(searchQuery)
+      : toast.error('input field must not be empty');
+    setSearchQuery('');
+  }
+
+  function handleInputChange(event) {
+    setSearchQuery(event.currentTarget.value.toLowerCase());
+  }
+
   async function getMovieByQuery() {
     try {
       const response = await api.fetchMovieByQuery(searchQuery);
@@ -29,16 +41,7 @@ export default function MoviesPage() {
 
   return (
     <section>
-      <form
-        onSubmit={event => {
-          event.preventDefault();
-          searchQuery.trim() !== ''
-            ? getMovieByQuery(searchQuery)
-            : toast.error('input field must not be empty');
-          setSearchQuery('');
-        }}
-        className={styles.MoviesPage}
-      >
+      <form onSubmit={handleFormSubmit} className={styles.MoviesPage}>
         <input
           className={styles.MoviesPage__input}
           type="text"
@@ -46,9 +49,7 @@ export default function MoviesPage() {
           autoFocus
           placeholder="search movies"
           value={searchQuery}
-          onChange={event =>
-            setSearchQuery(event.currentTarget.value.toLowerCase())
-          }
+          onChange={handleInputChange}
         />
         <button type="submit" className={styles.MoviesPage__button}>
           search
