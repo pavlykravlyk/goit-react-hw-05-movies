@@ -7,10 +7,10 @@ import Loader from 'react-loader-spinner';
 import Container from './components/Container/Container';
 import PageHeader from './components/PageHeader/PageHeader';
 
-const HomePage = lazy(() => import('./pages/HomePage/HomePage.jsx'));
-const MoviesPage = lazy(() => import('./pages/MoviesPage/MoviesPage.jsx'));
+const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
+const MoviesPage = lazy(() => import('./pages/MoviesPage/MoviesPage'));
 const MovieDetailPage = lazy(() =>
-  import('./pages/MovieDetailsPage/MovieDetailPage.jsx'),
+  import('./pages/MovieDetailsPage/MovieDetailPage'),
 );
 
 export default function App() {
