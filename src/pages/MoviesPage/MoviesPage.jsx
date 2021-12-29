@@ -1,10 +1,15 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as api from '../../services/themoviedb-api';
 import styles from '../HomePage/HomePage.module.css';
 
 export default function MoviesPage() {
+  // let navigate = useNavigate();
+  // console.log(navigate);
+  // const location = useLocation();
+  // console.log(location.search.slice(1));
+
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('null');
@@ -12,10 +17,14 @@ export default function MoviesPage() {
 
   function handleFormSubmit(event) {
     event.preventDefault();
-    searchQuery.trim() !== ''
-      ? getMovieByQuery(searchQuery)
-      : toast.error('input field must not be empty');
-    setSearchQuery('');
+
+    if (searchQuery.trim() !== '') {
+      getMovieByQuery(searchQuery);
+      // navigate({ search: searchQuery });
+      setSearchQuery('');
+    } else {
+      toast.error('input field must not be empty');
+    }
   }
 
   function handleInputChange(event) {
