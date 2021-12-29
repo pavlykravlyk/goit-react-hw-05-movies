@@ -50,10 +50,14 @@ export default function HomePage() {
           {trendsFilms.map(({ id, title }) => (
             <li key={id} className={styles.item}>
               <Link
-                to={{
-                  pathname: `/movies/${id}`,
+                to={
+                  // {
+                  // pathname:
+                  `/movies/${id}`
+                  // ,
                   // state: { from: location, label: 'Back to Home Page' },
-                }}
+                  // }
+                }
               >
                 {title}
               </Link>
