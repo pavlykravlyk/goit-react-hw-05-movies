@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -23,6 +22,7 @@ export function fetchDetails(movieId) {
 
   return fetch(`${BASE_URL}/${MediaType.MOVIE}/${movieId}?${searchParams}`);
 }
+fetchDetails.PropTypes = { movieId: PropTypes.number.isRequired };
 
 export function fetchCast(movieId) {
   const searchParams = new URLSearchParams({
@@ -33,6 +33,7 @@ export function fetchCast(movieId) {
     `${BASE_URL}/${MediaType.MOVIE}/${movieId}/credits?${searchParams}`,
   );
 }
+fetchCast.PropTypes = { movieId: PropTypes.number.isRequired };
 
 export function fetchReviews(movieId) {
   const searchParams = new URLSearchParams({
@@ -43,13 +44,14 @@ export function fetchReviews(movieId) {
     `${BASE_URL}/${MediaType.MOVIE}/${movieId}/reviews?${searchParams}`,
   );
 }
+fetchReviews.PropTypes = { movieId: PropTypes.number.isRequired };
 
 export function fetchMovieByQuery(searchQuery) {
   const searchParams = new URLSearchParams({
     api_key: API_KEY,
     query: searchQuery,
-    // page: page,
   });
 
   return fetch(`${BASE_URL}/search/${MediaType.MOVIE}?${searchParams}`);
 }
+fetchMovieByQuery.PropTypes = { searchQuery: PropTypes.string.isRequired };
