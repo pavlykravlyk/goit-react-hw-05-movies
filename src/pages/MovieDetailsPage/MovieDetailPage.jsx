@@ -1,6 +1,6 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
 import * as api from '../../services/themoviedb-api';
@@ -10,7 +10,7 @@ const Cast = lazy(() => import('../Cast/Cast'));
 const Reviews = lazy(() => import('../Reviews/Reviews'));
 
 export default function MovieDetailPage() {
-  const navigate = useNavigate();
+  let navigate = useNavigate();
   const { movieId } = useParams();
 
   const [movie, setMovie] = useState([]);
@@ -57,7 +57,9 @@ export default function MovieDetailPage() {
 
       {status === 'resolved' && (
         <section className={styles.Section}>
-          <button onClick={() => navigate(-1)}>go back</button>
+          <button className={styles.Button} onClick={() => navigate(-1)}>
+            go back
+          </button>
           <div className={styles.MainInfo}>
             <img
               className={styles.Img}
