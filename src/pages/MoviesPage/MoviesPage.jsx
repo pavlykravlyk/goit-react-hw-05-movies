@@ -5,9 +5,9 @@ import * as api from '../../services/themoviedb-api';
 import styles from '../HomePage/HomePage.module.css';
 
 export default function MoviesPage() {
-  // let navigate = useNavigate();
+  let navigate = useNavigate();
   // console.log(navigate);
-  // const location = useLocation();
+  const location = useLocation();
   // console.log(location.search.slice(1));
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,7 +20,7 @@ export default function MoviesPage() {
 
     if (searchQuery.trim() !== '') {
       getMovieByQuery(searchQuery);
-      // navigate({ search: searchQuery });
+      navigate({ search: `query=${searchQuery}` });
       setSearchQuery('');
     } else {
       toast.error('input field must not be empty');
