@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
@@ -6,6 +6,11 @@ import * as api from '../../services/themoviedb-api';
 import styles from './HomePage.module.css';
 
 export default function HomePage() {
+  // const location = useLocation();
+  // console.log(location);
+  // const navigate = useNavigate();
+  // console.log(to, options);
+
   const [trendsFilms, setTrendsFilms] = useState(null);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
@@ -44,7 +49,14 @@ export default function HomePage() {
         <ul className={styles.list}>
           {trendsFilms.map(({ id, title }) => (
             <li key={id} className={styles.item}>
-              <Link to={`/movies/${id}`}>{title}</Link>
+              <Link
+                to={{
+                  pathname: `/movies/${id}`,
+                  // state: { from: location, label: 'Back to Home Page' },
+                }}
+              >
+                {title}
+              </Link>
             </li>
           ))}
         </ul>
