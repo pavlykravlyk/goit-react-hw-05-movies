@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Link,
   // useNavigate,
-  // useLocation,
+  useLocation,
   useSearchParams,
 } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,7 +12,7 @@ import Loader from 'react-loader-spinner';
 
 export default function MoviesPage() {
   // const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('query');
@@ -88,7 +88,12 @@ export default function MoviesPage() {
         <ul className={styles.list}>
           {movies.map(({ id, title }) => (
             <li key={id}>
-              <Link to={`/movies/${id}`}>{title}</Link>
+              <Link
+                to={`/movies/${id}}`}
+                state={{ from: { location, label: 'go back to movies page' } }}
+              >
+                {title}
+              </Link>
             </li>
           ))}
         </ul>

@@ -1,6 +1,12 @@
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useParams,
+  useLocation,
+} from 'react-router-dom';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
 import * as api from '../../services/themoviedb-api';
@@ -10,7 +16,8 @@ const Cast = lazy(() => import('../Cast/Cast'));
 const Reviews = lazy(() => import('../Reviews/Reviews'));
 
 export default function MovieDetailPage() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { movieId } = useParams();
 
   const [movie, setMovie] = useState([]);
@@ -18,26 +25,26 @@ export default function MovieDetailPage() {
   const [status, setStatus] = useState('idle');
 
   useEffect(() => {
+    async function getMovieDetail() {
+      try {
+        const response = await api.fetchDetails(movieId);
+        if (response.ok) {
+          const data = await response.json();
+          setMovie(data);
+          setStatus('resolved');
+        } else {
+          return Promise.reject(new Error(`Movie not found`));
+        }
+      } catch (error) {
+        setError(error);
+        setStatus('rejected');
+        toast.error(error.message);
+      }
+    }
+
     setStatus('pending');
     getMovieDetail();
   }, [movieId]);
-
-  async function getMovieDetail() {
-    try {
-      const response = await api.fetchDetails(movieId);
-      if (response.ok) {
-        const data = await response.json();
-        setMovie(data);
-        setStatus('resolved');
-      } else {
-        return Promise.reject(new Error(`Movie ${movieId} not found`));
-      }
-    } catch (error) {
-      setError(error);
-      setStatus('rejected');
-      toast.error(error.message);
-    }
-  }
 
   const {
     poster_path,
@@ -57,8 +64,14 @@ export default function MovieDetailPage() {
 
       {status === 'resolved' && (
         <section className={styles.Section}>
-          <button className={styles.Button} onClick={() => navigate(-1)}>
-            go back
+          <button
+            type="button"
+            className={styles.Button}
+            onClick={() => {
+              navigate(location?.state?.from?.location ?? '/');
+            }}
+          >
+            {location?.state?.from?.label ?? 'go back'}
           </button>
           <div className={styles.MainInfo}>
             <img
@@ -89,10 +102,14 @@ export default function MovieDetailPage() {
             <p>Additional information</p>
             <ul className={styles.AddInfoList}>
               <li>
-                <Link to={`./cast`}>Cast</Link>
+                <Link to={`./cast`} state={{ from: location?.state?.from }}>
+                  Cast
+                </Link>
               </li>
               <li>
-                <Link to={`./reviews`}>Reviews</Link>
+                <Link to={`./reviews`} state={{ from: location?.state?.from }}>
+                  Reviews
+                </Link>
               </li>
             </ul>
           </div>
