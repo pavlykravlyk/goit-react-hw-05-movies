@@ -18,8 +18,8 @@ const Reviews = lazy(() => import('../Reviews/Reviews'));
 export default function MovieDetailPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { movieId } = useParams();
-
+  const { slug } = useParams();
+  const movieId = slug.match(/[0-9]+$/)[0];
   const [movie, setMovie] = useState([]);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
@@ -41,7 +41,6 @@ export default function MovieDetailPage() {
         toast.error(error.message);
       }
     }
-
     setStatus('pending');
     getMovieDetail();
   }, [movieId]);

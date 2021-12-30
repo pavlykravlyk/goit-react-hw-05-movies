@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Link,
-  // useNavigate,
-  useLocation,
-  useSearchParams,
-} from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import convertToSlug from '../../utils/slugify';
 import * as api from '../../services/themoviedb-api';
 import styles from '../HomePage/HomePage.module.css';
 import Loader from 'react-loader-spinner';
 
 export default function MoviesPage() {
-  // const navigate = useNavigate();
   const location = useLocation();
-
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('query');
   const [query, setQuery] = useState('');
@@ -89,7 +83,7 @@ export default function MoviesPage() {
           {movies.map(({ id, title }) => (
             <li key={id}>
               <Link
-                to={`/movies/${id}}`}
+                to={`/movies/${convertToSlug(`${title} ${id}`)}`}
                 state={{ from: { location, label: 'go back to movies page' } }}
               >
                 {title}
@@ -101,9 +95,3 @@ export default function MoviesPage() {
     </section>
   );
 }
-
-// setSearchParams({ query: event.currentTarget.value.toLowerCase() });
-// navigate({
-//   ...location,
-//   search: `query=${event.currentTarget.value.toLowerCase()}`,
-// });

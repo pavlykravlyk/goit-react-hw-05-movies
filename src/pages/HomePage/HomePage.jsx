@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
 import * as api from '../../services/themoviedb-api';
 import styles from './HomePage.module.css';
-
+import convertToSlug from '../../utils/slugify';
 export default function HomePage() {
   const location = useLocation();
 
@@ -47,7 +47,7 @@ export default function HomePage() {
           {trendsFilms.map(({ id, title }) => (
             <li key={id} className={styles.item}>
               <Link
-                to={`/movies/${id}`}
+                to={`/movies/${convertToSlug(`${title} ${id}`)}`}
                 state={{ from: { location, label: 'go back to home page' } }}
               >
                 {title}
