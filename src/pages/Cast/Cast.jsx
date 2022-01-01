@@ -1,7 +1,5 @@
 import styles from './Cast.module.css';
-import { useState, useEffect } from 'react';
-// import { Link, useParams } from 'react-router-dom';
-// import Loader from 'react-loader-spinner';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import * as api from '../../services/themoviedb-api';
 import Loader from 'react-loader-spinner';
@@ -11,16 +9,23 @@ export default function Cast({ movieId }) {
   const [cast, setCast] = useState([]);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
+  const unmountedRef = useRef();
 
   useEffect(() => {
-    setStatus('pending');
-    getMovieCast();
+    if (!unmountedRef.current) {
+      setStatus('pending');
+      getMovieCast();
+    }
+
+    return () => {
+      unmountedRef.current = !unmountedRef.current;
+    };
   }, []);
 
   async function getMovieCast() {
     try {
       const response = await api.fetchCast(movieId);
-      if (response.ok) {
+      if (response.ok && !unmountedRef.current) {
         const data = await response.json();
         setCast(data.cast);
         setStatus('resolved');
@@ -58,6 +63,8 @@ export default function Cast({ movieId }) {
           ))}
         </ul>
       )}
+
+      {cast.length === 0 && <p>Wie don't have any casts for this movie.</p>}
     </section>
   );
 }

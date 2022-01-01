@@ -1,20 +1,27 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
 import * as api from '../../services/themoviedb-api';
 import styles from './HomePage.module.css';
 import convertToSlug from '../../utils/slugify';
+
 export default function HomePage() {
   const location = useLocation();
-
   const [trendsFilms, setTrendsFilms] = useState(null);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
+  const unmountedRef = useRef();
 
   useEffect(() => {
-    setStatus('pending');
-    getFilmsTrending();
+    if (!unmountedRef.current) {
+      setStatus('pending');
+      getFilmsTrending();
+    }
+
+    return () => {
+      unmountedRef.current = true;
+    };
   }, []);
 
   async function getFilmsTrending() {

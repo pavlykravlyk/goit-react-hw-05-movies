@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import convertToSlug from '../../utils/slugify';
@@ -14,32 +14,38 @@ export default function MoviesPage() {
   const [movies, setMovies] = useState(null);
   const [error, setError] = useState('null');
   const [status, setStatus] = useState('idle');
+  const unmountedRef = useRef();
 
   useEffect(() => {
-    async function getMovieByQuery() {
-      try {
-        const response = await api.fetchMovieByQuery(searchQuery);
-        if (response.ok) {
-          const data = await response.json();
-          setMovies(data.results);
-          setStatus('resolved');
-        } else {
-          return Promise.reject(new Error(`Movie ${searchQuery} not found`));
-        }
-      } catch {
-        setError(error);
-        setStatus('rejected');
-        toast.error(error.message);
-      }
-    }
-
-    if (searchQuery) {
+    if (
+      (searchQuery && !unmountedRef.current) ||
+      (searchQuery && unmountedRef.current)
+    ) {
       setStatus('pending');
       getMovieByQuery();
     }
 
-    // return () => {};
+    return () => {
+      unmountedRef.current = !unmountedRef.current;
+    };
   }, [searchQuery]);
+
+  async function getMovieByQuery() {
+    try {
+      const response = await api.fetchMovieByQuery(searchQuery);
+      if (response.ok) {
+        const data = await response.json();
+        setMovies(data.results);
+        setStatus('resolved');
+      } else {
+        return Promise.reject(new Error(`Movie ${searchQuery} not found`));
+      }
+    } catch {
+      setError(error);
+      setStatus('rejected');
+      toast.error(error.message);
+    }
+  }
 
   function handleFormSubmit(event) {
     event.preventDefault();

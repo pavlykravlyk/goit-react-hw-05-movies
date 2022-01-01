@@ -6,7 +6,7 @@ import {
   useParams,
   useLocation,
 } from 'react-router-dom';
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
 import * as api from '../../services/themoviedb-api';
@@ -23,27 +23,35 @@ export default function MovieDetailPage() {
   const [movie, setMovie] = useState([]);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
+  const unmountedRef = useRef();
 
   useEffect(() => {
-    async function getMovieDetail() {
-      try {
-        const response = await api.fetchDetails(movieId);
-        if (response.ok) {
-          const data = await response.json();
-          setMovie(data);
-          setStatus('resolved');
-        } else {
-          return Promise.reject(new Error(`Movie not found`));
-        }
-      } catch (error) {
-        setError(error);
-        setStatus('rejected');
-        toast.error(error.message);
-      }
+    if (!unmountedRef.current) {
+      setStatus('pending');
+      getMovieDetail();
     }
-    setStatus('pending');
-    getMovieDetail();
+
+    return () => {
+      unmountedRef.current = true;
+    };
   }, [movieId]);
+
+  async function getMovieDetail() {
+    try {
+      const response = await api.fetchDetails(movieId);
+      if (response.ok) {
+        const data = await response.json();
+        setMovie(data);
+        setStatus('resolved');
+      } else {
+        return Promise.reject(new Error(`Movie not found`));
+      }
+    } catch (error) {
+      setError(error);
+      setStatus('rejected');
+      toast.error(error.message);
+    }
+  }
 
   const {
     poster_path,
