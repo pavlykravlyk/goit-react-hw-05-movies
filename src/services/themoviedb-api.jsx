@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
