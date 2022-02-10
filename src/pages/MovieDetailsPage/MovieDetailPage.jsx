@@ -18,14 +18,32 @@ const Reviews = lazy(() => import('../Reviews/Reviews'));
 export default function MovieDetailPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { slug } = useParams();
-  const movieId = slug.match(/[0-9]+$/)[0];
   const [movie, setMovie] = useState([]);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
   const unmountedRef = useRef();
 
+  const { slug } = useParams();
+  const movieId = slug.match(/[0-9]+$/)[0];
+
   useEffect(() => {
+    async function getMovieDetail() {
+      try {
+        const response = await api.fetchDetails(movieId);
+        if (response.ok) {
+          const data = await response.json();
+          setMovie(data);
+          setStatus('resolved');
+        } else {
+          return Promise.reject(new Error(`Movie not found`));
+        }
+      } catch (error) {
+        setError(error);
+        setStatus('rejected');
+        toast.error(error.message);
+      }
+    }
+
     if (!unmountedRef.current) {
       setStatus('pending');
       getMovieDetail();
@@ -35,23 +53,6 @@ export default function MovieDetailPage() {
       unmountedRef.current = true;
     };
   }, [movieId]);
-
-  async function getMovieDetail() {
-    try {
-      const response = await api.fetchDetails(movieId);
-      if (response.ok) {
-        const data = await response.json();
-        setMovie(data);
-        setStatus('resolved');
-      } else {
-        return Promise.reject(new Error(`Movie not found`));
-      }
-    } catch (error) {
-      setError(error);
-      setStatus('rejected');
-      toast.error(error.message);
-    }
-  }
 
   const {
     poster_path,

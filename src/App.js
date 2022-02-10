@@ -1,5 +1,14 @@
-import React, { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import {
+  // useQuery,
+  // useMutation,
+  // useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+
+import { lazy, Suspense } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import styles from './App.module.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,25 +22,35 @@ const MovieDetailPage = lazy(() =>
   import('./pages/MovieDetailsPage/MovieDetailPage'),
 );
 
+const queryClient = new QueryClient();
+
 export default function App() {
   return (
-    <div className={styles.App}>
-      <Container>
-        <PageHeader />
-        <Suspense
-          fallback={
-            <Loader type="ThreeDots" color="gray" height={80} width={80} />
-          }
-        >
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/movies/:slug/*" element={<MovieDetailPage />} />
-          </Routes>
-        </Suspense>
-      </Container>
+    <QueryClientProvider client={queryClient}>
+      <div className={styles.App}>
+        <Container>
+          <PageHeader />
+          <Suspense
+            fallback={
+              <Loader type="ThreeDots" color="gray" height={80} width={80} />
+            }
+          >
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/movies" element={<MoviesPage />} />
+              <Route
+                path="/movies/:slug/*"
+                element={<MovieDetailPage />}
+              ></Route>
 
-      <ToastContainer autoClose={3000} />
-    </div>
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </Suspense>
+        </Container>
+
+        <ToastContainer autoClose={3000} />
+      </div>
+      <ReactQueryDevtools initialIsOpen />
+    </QueryClientProvider>
   );
 }

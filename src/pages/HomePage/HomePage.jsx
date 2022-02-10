@@ -14,6 +14,23 @@ export default function HomePage() {
   const unmountedRef = useRef();
 
   useEffect(() => {
+    async function getFilmsTrending() {
+      try {
+        const response = await api.fetchTrending();
+        if (response.ok) {
+          const data = await response.json();
+          setTrendsFilms(data.results);
+          setStatus('resolved');
+        } else {
+          return Promise.reject(new Error('No trends found'));
+        }
+      } catch (error) {
+        setError(error);
+        setStatus('rejected');
+        toast.error(error.message);
+      }
+    }
+
     if (!unmountedRef.current) {
       setStatus('pending');
       getFilmsTrending();
@@ -23,23 +40,6 @@ export default function HomePage() {
       unmountedRef.current = true;
     };
   }, []);
-
-  async function getFilmsTrending() {
-    try {
-      const response = await api.fetchTrending();
-      if (response.ok) {
-        const data = await response.json();
-        setTrendsFilms(data.results);
-        setStatus('resolved');
-      } else {
-        return Promise.reject(new Error('No trends found'));
-      }
-    } catch (error) {
-      setError(error);
-      setStatus('rejected');
-      toast.error(error.message);
-    }
-  }
 
   return (
     <section>
